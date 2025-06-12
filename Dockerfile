@@ -9,6 +9,9 @@ COPY requirements.txt /app/
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . /app/
+RUN python manage.py collectstatic --noinput && \
+    python manage.py migrate && \
+    python manage.py createsuperuser --noinput || true
 
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "tabbycat.wsgi:application"]
 
